@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Cửa hàng ABC</title>
+  <title>Store Manager</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Progressier -->
@@ -13,44 +13,110 @@
 
   <style>
     body {
-      font-family: system-ui, sans-serif;
       margin: 0;
-      padding: 40px;
-      text-align: center;
-      background: #f8f9fa;
+      font-family: system-ui, sans-serif;
+      background: #f3f4f6;
+    }
+    .app {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #fff;
+      padding: 16px;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .menu button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 6px;
+      background: none;
+      border: none;
+      color: #fff;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .menu button:hover {
+      background: #1f2937;
+    }
+    .content {
+      flex: 1;
+      padding: 24px;
     }
     .card {
-      max-width: 480px;
-      margin: auto;
       background: #fff;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
     }
-    button {
-      padding: 12px 18px;
-      margin-top: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
+    .hidden {
+      display: none;
     }
-    .primary { background: #4f46e5; color: white; }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>🏪 Cửa hàng ABC</h1>
-    <p>Thông báo khuyến mãi & giờ mở cửa</p>
-
-    <button class="primary" onclick="Progressier.subscribe()">
-      🔔 Nhận thông báo
-    </button>
-
-    <p style="margin-top:16px;font-size:14px;color:#555">
-      Mở app từ màn hình chính để nhận thông báo
-    </p>
+<div class="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>🏪 Store Admin</h2>
+    <div class="menu">
+      <button onclick="show('dashboard')">📊 Dashboard</button>
+      <button onclick="show('products')">📦 Sản phẩm</button>
+      <button onclick="show('orders')">🧾 Đơn hàng</button>
+      <button onclick="show('customers')">👥 Khách hàng</button>
+      <button onclick="show('reports')">📈 Báo cáo</button>
+      <button onclick="Progressier.subscribe()">🔔 Nhận thông báo</button>
+    </div>
   </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div id="dashboard" class="screen card">
+      <h3>📊 Dashboard</h3>
+      <p>Doanh thu hôm nay: <b>12.500.000₫</b></p>
+      <p>Đơn hàng mới: <b>8</b></p>
+    </div>
+
+    <div id="products" class="screen card hidden">
+      <h3>📦 Quản lý sản phẩm</h3>
+      <ul>
+        <li>☕ Cà phê sữa – 30.000₫</li>
+        <li>🥤 Trà đào – 35.000₫</li>
+      </ul>
+    </div>
+
+    <div id="orders" class="screen card hidden">
+      <h3>🧾 Đơn hàng</h3>
+      <p>#DH001 – Hoàn thành</p>
+      <p>#DH002 – Đang xử lý</p>
+    </div>
+
+    <div id="customers" class="screen card hidden">
+      <h3>👥 Khách hàng</h3>
+      <p>Nguyễn Văn A</p>
+      <p>Trần Thị B</p>
+    </div>
+
+    <div id="reports" class="screen card hidden">
+      <h3>📈 Báo cáo</h3>
+      <p>Top sản phẩm bán chạy</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+</script>
 </body>
 </html>
