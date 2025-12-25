@@ -232,7 +232,8 @@
             <button class="active" onclick="nav('dashboard',this)">📊 Dashboard</button>
             <button onclick="nav('products',this)">📦 Sản phẩm</button>
             <button onclick="nav('orders',this)">🧾 Đơn hàng</button>
-            <button onclick="nav('settings',this)">🔔 Thông báo</button>
+            <button onclick="enablePush()">🔔 Bật thông báo</button>
+            <p id="pushStatus" style="font-size:13px;margin-top:8px;"></p>
         </div>
 
         <!-- MAIN -->
@@ -325,6 +326,70 @@
     </div>
 
     <script>
+        function enablePush() {
+
+            /* 1️⃣ Check network */
+            if (!navigator.onLine) {
+                toast("❌ Không có kết nối Internet", "error");
+                return;
+            }
+
+            /* 2️⃣ Check hỗ trợ */
+            if (!("Notification" in window)) {
+                toast("❌ Thiết bị không hỗ trợ thông báo", "error");
+                return;
+            }
+
+            /* 3️⃣ Đã bật rồi */
+            if (Notification.permission === "granted") {
+                toast("✅ Thông báo đã được bật");
+                document.getElementById("pushStatus").innerText =
+                    "Trạng thái: Đã bật thông báo";
+                return;
+            }
+
+            /* 4️⃣ Bị chặn */
+            if (Notification.permission === "denied") {
+                toast("❌ Trình duyệt đang chặn thông báo", "error");
+                document.getElementById("pushStatus").innerText =
+                    "Trạng thái: Bị chặn (hãy bật lại trong cài đặt)";
+                return;
+            }
+
+            /* 5️⃣ CHƯA HỎI → HƯỚNG DẪN */
+            toast("👉 Vui lòng cho phép thông báo trong popup");
+
+            /* 6️⃣ Gọi Progressier */
+            Progressier.subscribe();
+
+            /* 7️⃣ Kiểm tra kết quả sau 1s */
+            setTimeout(() => {
+                if (Notification.permission === "granted") {
+                    toast("🎉 Bật thông báo thành công!");
+                    document.getElementById("pushStatus").innerText =
+                        "Trạng thái: Đã bật thông báo";
+                } else {
+                    toast("⚠️ Bạn chưa cho phép thông báo", "error");
+                }
+            }, 1200);
+        }
+
+        /* 8️⃣ Hiển thị trạng thái khi load */
+        window.addEventListener("load", () => {
+            const el = document.getElementById("pushStatus");
+            if (!el) return;
+
+            if (!navigator.onLine) {
+                el.innerText = "Trạng thái mạng: Offline";
+                return;
+            }
+
+            if (Notification.permission === "granted") {
+                el.innerText = "Trạng thái: Đã bật thông báo";
+            } else {
+                el.innerText = "Trạng thái: Chưa bật thông báo";
+            }
+        });
         function nav(id, btn) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'))
             document.getElementById(id).classList.remove('hidden')
