@@ -1,122 +1,395 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Store Manager</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <title>Store Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Progressier -->
-  <link rel="manifest"
-        href="https://progressier.app/LBgry4jfbFpQALufNwgN/progressier.json" />
-  <script defer
-          src="https://progressier.app/LBgry4jfbFpQALufNwgN/script.js"></script>
+    <!-- PROGRESSIER -->
+    <link rel="manifest" href="https://progressier.app/YOUR_PROGRESSIER_ID/progressier.json">
+    <script defer src="https://progressier.app/YOUR_PROGRESSIER_ID/script.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #f3f4f6;
-    }
-    .app {
-      display: flex;
-      height: 100vh;
-    }
-    .sidebar {
-      width: 220px;
-      background: #111827;
-      color: #fff;
-      padding: 16px;
-    }
-    .sidebar h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-    .menu button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 6px;
-      background: none;
-      border: none;
-      color: #fff;
-      text-align: left;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    .menu button:hover {
-      background: #1f2937;
-    }
-    .content {
-      flex: 1;
-      padding: 24px;
-    }
-    .card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.08);
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #f4f6fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .app {
+            display: flex;
+            min-height: 100dvh
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(180deg, #4f46e5, #6366f1);
+            color: #fff;
+            padding: 20px 16px;
+        }
+
+        .sidebar h2 {
+            margin: 0 0 24px;
+            font-size: 20px;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border: 0;
+            background: transparent;
+            color: #fff;
+            text-align: left;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            gap: 8px;
+        }
+
+        .sidebar button:hover,
+        .sidebar button.active {
+            background: rgba(255, 255, 255, .15);
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            height: 56px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .05);
+        }
+
+        .header b {
+            font-size: 15px
+        }
+
+        .header span {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 20px;
+            padding-bottom: 90px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
+        }
+
+        .card h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+        }
+
+        .kpi {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        /* TABLE */
+        .table-wrap {
+            overflow-x: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            text-transform: uppercase;
+            font-size: 12px;
+            color: var(--muted);
+            background: #fafafa;
+        }
+
+        tr:hover {
+            background: #f9fafb
+        }
+
+        /* STATUS */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+        }
+
+        .ok {
+            background: #dcfce7;
+            color: #166534
+        }
+
+        .low {
+            background: #fef3c7;
+            color: #92400e
+        }
+
+        .out {
+            background: #fee2e2;
+            color: #991b1b
+        }
+
+        /* SEARCH */
+        .search {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            margin-bottom: 12px;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .bottom-nav button {
+            border: 0;
+            background: none
+        }
+
+        canvas {
+            width: 100%
+        }
+
+        .hidden {
+            display: none
+        }
+
+        @media(max-width:768px) {
+            .sidebar {
+                display: none
+            }
+
+            .bottom-nav {
+                display: flex
+            }
+        }
+    </style>
 </head>
 
 <body>
-<div class="app">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>🏪 Store Admin</h2>
-    <div class="menu">
-      <button onclick="show('dashboard')">📊 Dashboard</button>
-      <button onclick="show('products')">📦 Sản phẩm</button>
-      <button onclick="show('orders')">🧾 Đơn hàng</button>
-      <button onclick="show('customers')">👥 Khách hàng</button>
-      <button onclick="show('reports')">📈 Báo cáo</button>
-      <button onclick="Progressier.subscribe()">🔔 Nhận thông báo</button>
-    </div>
-  </div>
+    <div class="app">
 
-  <!-- Content -->
-  <div class="content">
-    <div id="dashboard" class="screen card">
-      <h3>📊 Dashboard</h3>
-      <p>Doanh thu hôm nay: <b>12.500.000₫</b></p>
-      <p>Đơn hàng mới: <b>8</b></p>
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>Admin Pro</h2>
+            <button class="active" onclick="nav('dashboard',this)">📊 Dashboard</button>
+            <button onclick="nav('products',this)">📦 Sản phẩm</button>
+            <button onclick="nav('orders',this)">🧾 Đơn hàng</button>
+            <button onclick="nav('settings',this)">🔔 Thông báo</button>
+        </div>
+
+        <!-- MAIN -->
+        <div class="main">
+
+            <div class="header">
+                <b>Cửa hàng ABC</b>
+                <span>Admin</span>
+            </div>
+
+            <div class="content">
+
+                <!-- DASHBOARD -->
+                <div id="dashboard" class="screen">
+                    <div class="grid">
+                        <div class="card">
+                            <h3>Doanh thu</h3>
+                            <div class="kpi">12.5tr</div>
+                        </div>
+                        <div class="card">
+                            <h3>Đơn hôm nay</h3>
+                            <div class="kpi">8</div>
+                        </div>
+                        <div class="card">
+                            <h3>Sản phẩm</h3>
+                            <div class="kpi">32</div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card">
+                        <h3>📈 Doanh thu tuần</h3>
+                        <canvas id="barChart" height="160"></canvas>
+                    </div>
+                </div>
+
+                <!-- PRODUCTS -->
+                <div id="products" class="screen hidden card">
+                    <h3>📦 Sản phẩm</h3>
+                    <input class="search" placeholder="Tìm sản phẩm..." oninput="filterProducts(this.value)">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên</th>
+                                    <th>Giá</th>
+                                    <th>Tồn</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ORDERS -->
+                <div id="orders" class="screen hidden card">
+                    <h3>🧾 Đơn hàng</h3>
+                    <input class="search" placeholder="Tìm đơn..." oninput="filterOrders(this.value)">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Khách</th>
+                                    <th>Tổng</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SETTINGS -->
+                <div id="settings" class="screen hidden card">
+                    <h3>🔔 Thông báo</h3>
+                    <button onclick="Progressier.subscribe()">Bật thông báo</button>
+                </div>
+
+            </div>
+        </div>
     </div>
 
-    <div id="products" class="screen card hidden">
-      <h3>📦 Quản lý sản phẩm</h3>
-      <ul>
-        <li>☕ Cà phê sữa – 30.000₫</li>
-        <li>🥤 Trà đào – 35.000₫</li>
-      </ul>
+    <!-- MOBILE NAV -->
+    <div class="bottom-nav">
+        <button onclick="nav('dashboard')">🏠</button>
+        <button onclick="nav('products')">📦</button>
+        <button onclick="nav('orders')">🧾</button>
+        <button onclick="nav('settings')">🔔</button>
     </div>
 
-    <div id="orders" class="screen card hidden">
-      <h3>🧾 Đơn hàng</h3>
-      <p>#DH001 – Hoàn thành</p>
-      <p>#DH002 – Đang xử lý</p>
-    </div>
+    <script>
+        function nav(id, btn) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'))
+            document.getElementById(id).classList.remove('hidden')
+            document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'))
+            btn && btn.classList.add('active')
+        }
 
-    <div id="customers" class="screen card hidden">
-      <h3>👥 Khách hàng</h3>
-      <p>Nguyễn Văn A</p>
-      <p>Trần Thị B</p>
-    </div>
+        /* DATA */
+        const products = [
+            { name: "Cà phê sữa", price: 30000, stock: 20 },
+            { name: "Trà đào", price: 35000, stock: 5 },
+            { name: "Bạc xỉu", price: 32000, stock: 0 }
+        ]
+        const orders = [
+            { id: "DH001", customer: "Nguyễn A", total: 120000, status: "Hoàn thành" },
+            { id: "DH002", customer: "Trần B", total: 80000, status: "Đang xử lý" }
+        ]
 
-    <div id="reports" class="screen card hidden">
-      <h3>📈 Báo cáo</h3>
-      <p>Top sản phẩm bán chạy</p>
-    </div>
-  </div>
-</div>
+        function renderProducts(list = products) {
+            const tb = document.getElementById("productTable"); tb.innerHTML = ""
+            list.forEach(p => {
+                let cls = "ok", txt = "Còn"
+                if (p.stock === 0) { cls = "out"; txt = "Hết" }
+                else if (p.stock < 10) { cls = "low"; txt = "Sắp hết" }
+                tb.innerHTML += `<tr>
+<td>${p.name}</td>
+<td>${p.price.toLocaleString()}₫</td>
+<td>${p.stock}</td>
+<td><span class="badge ${cls}">${txt}</span></td>
+</tr>`
+            })
+        }
+        function renderOrders(list = orders) {
+            const tb = document.getElementById("orderTable"); tb.innerHTML = ""
+            list.forEach(o => {
+                tb.innerHTML += `<tr>
+<td>${o.id}</td>
+<td>${o.customer}</td>
+<td>${o.total.toLocaleString()}₫</td>
+<td>${o.status}</td>
+</tr>`
+            })
+        }
+        function filterProducts(k) {
+            renderProducts(products.filter(p => p.name.toLowerCase().includes(k.toLowerCase())))
+        }
+        function filterOrders(k) {
+            renderOrders(orders.filter(o => o.id.includes(k) || o.customer.toLowerCase().includes(k.toLowerCase())))
+        }
 
-<script>
-  function show(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-  }
-</script>
+        /* BAR CHART */
+        function barChart() {
+            const c = document.getElementById("barChart"), ctx = c.getContext("2d")
+            const d = [5, 8, 6, 10, 12], w = c.width = c.offsetWidth, h = c.height
+            ctx.clearRect(0, 0, w, h)
+            ctx.fillStyle = "#6366f1"
+            d.forEach((v, i) => ctx.fillRect(i * (w / d.length) + 10, h - v * 10, 30, v * 10))
+        }
+        window.onload = () => {
+            renderProducts()
+            renderOrders()
+            barChart()
+        }
+        window.onresize = barChart
+    </script>
 </body>
+
 </html>
