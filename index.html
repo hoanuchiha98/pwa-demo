@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>PWA Progressier Demo</title>
+
+  <!-- Progressier script (thay YOUR_ID sau) -->
+  <script defer src="https://progressier.app/YOUR_ID/script.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      font-family: system-ui;
+      padding: 40px;
+      text-align: center;
+    }
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚀 PWA Test</h1>
+  <p>Web app tối thiểu để test Progressier</p>
+
+  <button onclick="Progressier.subscribe()">
+    🔔 Enable Push Notification
+  </button>
+
+  <br />
+
+  <button onclick="alert(navigator.onLine ? 'Online' : 'Offline')">
+    🌐 Check Network
+  </button>
+
+</body>
+</html>
